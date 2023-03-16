@@ -1,0 +1,75 @@
+#1. Plot the loss and accuracy for both training data and validation data using the history object in the sourcecode.
+import matplotlib.pyplot as plt
+
+
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+
+
+
+#2. Plot one of the images in the test data, and then do inferencing to check what is the prediction of the model
+on that single image.
+
+import matplotlib.pyplot as plt
+plt.imshow(test_images[0], cmap='gray')
+image = test_data[0].reshape(1, dimData)
+prediction = model.predict(image)
+print('Prediction:', np.argmax(prediction))
+
+#3. We had used 2 hidden layers and Relu activation. Try to change the number of hidden layer and the
+activation to tanh or sigmoid and see what happens
+
+
+model = Sequential()
+model.add(Dense(512, activation='tanh', input_shape=(dimData,)))
+model.add(Dense(256, activation='tanh'))
+model.add(Dense(128, activation='tanh'))
+model.add(Dense(10, activation='softmax'))
+
+model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+history = model.fit(train_data, train_labels_one_hot, batch_size=256, epochs=10, verbose=1,
+                   validation_data=(test_data, test_labels_one_hot))
+                   model = Sequential()
+model.add(Dense(512, activation='sigmoid', input_shape=(dimData,)))
+model.add(Dense(256, activation='sigmoid'))
+model.add(Dense(128, activation='sigmoid'))
+model.add(Dense(10, activation='softmax'))
+
+model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+history = model.fit(train_data, train_labels_one_hot, batch_size=256, epochs=10, verbose=1,
+                   validation_data=(test_data, test_labels_one_hot))
+
+
+
+
+#4. Run the same code without scaling the images and check the performance?
+
+
+train_data = train_images.reshape(train_images.shape[0],dimData)
+test_data = test_images.reshape(test_images.shape[0],dimData)
+train_labels_one_hot = to_categorical(train_labels)
+test_labels_one_hot = to_categorical(test_labels)
+model = Sequential()
+model.add(Dense(512, activation='relu', input_shape=(dimData,)))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(10, activation='softmax'))
+
+model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+history = model.fit(train_data, train_labels_one_hot, batch_size=256, epochs=10, verbose=1,
+                   validation_data=(test_data, test_labels_one_hot))
+
